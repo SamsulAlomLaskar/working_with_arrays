@@ -72,6 +72,7 @@ const overallBalance = accounts
 console.log(overallBalance);
 
 //? flatMap combines the flat & Map method together
+
 const overallBalance2 = accounts
   .flatMap((acc) => acc.movements)
   .reduce((acc, mov) => acc + mov, 0);
@@ -163,3 +164,16 @@ const getMax = movements.reduce((acc, curr) => {
   }
 }, movements[0]);
 console.log(getMax, "MAX");
+
+//? Chaining Methods
+
+const totalDepositsInUsd = movements
+  .filter((mov) => mov > 0)
+  // .map((mov) => mov * euroToUsd)
+  .map((mov, ind, arr) => {
+    // console.log(arr);
+    return mov * euroToUsd;
+  })
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(totalDepositsInUsd);
