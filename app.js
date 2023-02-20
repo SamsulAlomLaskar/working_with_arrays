@@ -1,3 +1,34 @@
+// Data
+const account1 = {
+  owner: "Jonas Schmedtmann",
+  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  interestRate: 1.2, // %
+  pin: 1111,
+};
+
+const account2 = {
+  owner: "Jessica Davis",
+  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+  interestRate: 1.5,
+  pin: 2222,
+};
+
+const account3 = {
+  owner: "Steven Thomas Williams",
+  movements: [200, -200, 340, -300, -20, 50, 400, -460],
+  interestRate: 0.7,
+  pin: 3333,
+};
+
+const account4 = {
+  owner: "Sarah Smith",
+  movements: [430, 1000, 700, 50, 90],
+  interestRate: 1,
+  pin: 4444,
+};
+
+const accounts = [account1, account2, account3, account4];
+
 const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
 console.log(arr.flat());
 
@@ -27,11 +58,11 @@ console.log(letters);
 
 //? At
 
-const arr3 = [11, 23, 45];
-console.log(arr3.at(0));
+// const arr3 = [11, 23, 45];
+// console.log(arr3.at(0));
 
-console.log(arr3.at(-1));
-console.log("samsul".at(2));
+// console.log(arr3.at(-1));
+// console.log("samsul".at(2));
 
 const overallBalance = accounts
   .map((acc) => acc.movements)
@@ -59,7 +90,7 @@ for (const movement of movements) {
 
 console.log("==========================");
 
-//? Continue & break statement do not work in forEach
+//? Continue & break statement do not work in forEach // forEach methods creates side effects, because it prints the elements in each iteration in the console
 
 movements.forEach((movement, index, arr) => {
   if (movement > 0) {
@@ -86,3 +117,49 @@ console.log(uniqueCurrencies);
 uniqueCurrencies.forEach((value, index) => {
   console.log(index, "Index", value, "Value");
 });
+
+//? Map creates a new array based on the original array, it doesn't creates side effects because it pushs the new value in the new array & once the iteration is completed it returns the new array
+
+const euroToUsd = 1.1;
+const convertedUsd = movements.map((values) => values * euroToUsd);
+
+console.log(convertedUsd);
+
+//? Filter -
+
+const deposits = movements.filter((items) => items > 0);
+console.log(deposits);
+
+const withdrawals = movements.filter((items) => items < 0);
+console.log(withdrawals);
+
+//? Reduce
+
+const totalBalance = movements.reduce(
+  (accum, curr, ind, arr) => accum + curr,
+  0
+);
+/* 
+* const totalBalance = movements.reduce((accum, curr, ind, arr) => {
+? console.log(`Iteration ${ind}: previous ${accum} & current ${curr}`);
+!  return accum + curr;
+}, 0); */
+console.log(totalBalance);
+
+let balance = 0;
+for (const mov of movements) balance += mov;
+console.log(balance);
+
+//? finding maximum value
+
+const getMax = movements.reduce((acc, curr) => {
+  console.log("previous ACC", acc, "current CURR", curr);
+  if (acc > curr) {
+    console.log(acc, "ACC");
+    return acc;
+  } else {
+    console.log("Curr");
+    return curr;
+  }
+}, movements[0]);
+console.log(getMax, "MAX");

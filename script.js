@@ -6,7 +6,7 @@
 
 // Data
 const account1 = {
-  owner: "Jonas Schmedtmann",
+  owner: "Samsul Alom",
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -78,6 +78,26 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+const user = "Samsul Alom";
+
+const createUsername = function (accounts) {
+  accounts.forEach((accs) => {
+    accs.userName = accs.owner
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name[0])
+      .join("");
+  });
+};
+console.log(accounts);
+// createUsername(accounts);
+
+const calculateBalance = function (movements) {
+  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+  labelBalance.textContent = `${balance} ₹`;
+};
+
+calculateBalance(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
