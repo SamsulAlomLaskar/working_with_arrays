@@ -224,3 +224,27 @@ console.log(owners.sort());
 
 movements.sort((a, b) => b - a);
 console.log(movements);
+
+//? Fill
+// const x = new Array(7).fill(10);
+const x = new Array(7);
+console.log(x.fill(Math.trunc(Math.random() * 10), 0));
+console.log(x.fill(3, 2));
+console.log(x.fill(8, 2, 4));
+
+//*From - Create new array using from
+const y = Array.from({ length: 10 }, () => 2);
+console.log(y, "Y");
+
+const z = Array.from({ length: 10 }, (_, ind) => ind + 1);
+console.log(z, "Z");
+
+//? const bankDepositsSum = accounts.map((acc) => acc.movements).flat();
+const bankDepositsSum = accounts
+  .flatMap((acc) => acc.movements)
+  .filter((mov) => mov > 0)
+  .reduce((acc, cur) => acc + cur, 0);
+
+console.log(bankDepositsSum);
+
+const depositsAbove100 = 
