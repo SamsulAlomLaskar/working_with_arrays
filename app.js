@@ -177,3 +177,18 @@ const totalDepositsInUsd = movements
   .reduce((acc, mov) => acc + mov, 0);
 
 console.log(totalDepositsInUsd);
+
+//? Find - returns the first elements of the array that satifies the condition
+
+//* Filter returns all the elements that matchs the condition while find methods returns only the first one
+
+//! filter method returns the new array while the find returns only the element not an array
+
+const firstWithdrawal = movements.find((mov) => mov < 0);
+
+console.log(firstWithdrawal);
+
+console.log(accounts);
+
+const account = accounts.find((acc) => acc.owner === "Jessica Davis");
+console.log(account, "FIND");

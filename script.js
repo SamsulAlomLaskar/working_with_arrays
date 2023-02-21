@@ -76,7 +76,7 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
 const user = "Samsul Alom";
 
@@ -90,29 +90,29 @@ const createUsername = function (accounts) {
   });
 };
 console.log(accounts);
-// createUsername(accounts);
+createUsername(accounts);
 
 const calculateBalance = function (movements) {
   const balance = movements.reduce((acc, curr) => acc + curr, 0);
   labelBalance.textContent = `${balance}₹`;
 };
 
-calculateBalance(account1.movements);
+// calculateBalance(account1.movements);
 
-const calculateSummary = function (movements) {
-  const incomes = movements
+const calculateSummary = function (accs) {
+  const incomes = accs.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}₹`;
 
-  const out = movements
+  const out = accs.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.innerHTML = `${Math.abs(out)}₹`;
 
-  const interest = movements
+  const interest = accs.movements
     .filter((mov) => mov > 0)
-    .map((deposit) => (deposit * 1.2) / 100)
+    .map((deposit) => (deposit * accs.interestRate) / 100)
     .filter((int, ind, arr) => {
       return int >= 1;
     })
@@ -121,7 +121,35 @@ const calculateSummary = function (movements) {
   labelSumInterest.innerHTML = `${interest}₹`;
 };
 
-calculateSummary(account1.movements);
+// calculateSummary(account1.movements);
+
+// Event Listener
+let currentAccount;
+
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  currentAccount = accounts.find(
+    (acc) => acc.userName === inputLoginUsername.value
+  );
+  // console.log(currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    //Clear the login fields
+
+    inputLoginPin.value = inputLoginUsername.value = "";
+
+    //? to make the input field blur
+    inputLoginPin.blur();
+
+    // Display movements
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(" ")[0]
+    }`;
+    containerApp.style.opacity = 100;
+    displayMovements(currentAccount.movements);
+    calculateBalance(currentAccount.movements);
+    calculateSummary(currentAccount);
+  }
+});
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
