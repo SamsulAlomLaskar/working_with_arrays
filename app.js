@@ -247,4 +247,39 @@ const bankDepositsSum = accounts
 
 console.log(bankDepositsSum);
 
-const depositsAbove100 = 
+//* const depositsAbove100 = accounts.flatMap((acc) => acc.movements).filter((mov) => mov >= 1000).length;
+
+//? const depositsAbove100 = accounts.flatMap((acc) => acc.movements).reduce((count, curr) => (curr >= 1000 ? count + 1 : count), 0);
+
+const depositsAbove100 = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((count, curr) => (curr >= 1000 ? ++count : count), 0);
+
+console.log(depositsAbove100);
+
+const { depositsAmt, withdrawal } = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce(
+    (prev, curr) => {
+      // curr > 0 ? (prev.depositsAmt += curr) : (prev.withdrawal += curr);
+      prev[curr > 0 ? "depositsAmt" : "withdrawal"] += curr;
+      return prev;
+    },
+    { depositsAmt: 0, withdrawal: 0 }
+  );
+console.log(depositsAmt, withdrawal);
+
+//? convert string to title case
+const convertTitleCase = function (title) {
+  const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
+  const exceptions = ["a", "an", "the", "and", "but", "or", "on", "in", "with"];
+  const titleCase = title
+    .toLowerCase()
+    .split(" ")
+    .map((word) => (exceptions.includes(word) ? word : capitalize(word)))
+    .join(" ");
+  return capitalize(titleCase);
+};
+console.log(convertTitleCase("this is a nice TITLE"));
+console.log(convertTitleCase("this is a long TITLE but not too long"));
+console.log(convertTitleCase("and here is the another title with an eXaMpLe"));
