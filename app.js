@@ -192,3 +192,35 @@ console.log(accounts);
 
 const account = accounts.find((acc) => acc.owner === "Jessica Davis");
 console.log(account, "FIND");
+
+//? findIndex - we can perform validations as it takes a CB function while indexOf only takes an element & return true false
+
+//? Some - we can perform validations as it takes a CB function while includes only takes an element & return true false
+
+//* Equality
+
+console.log(movements.includes(-130));
+
+//* Condition
+
+const anyDeposits = movements.some((mov) => mov > 0);
+console.log(anyDeposits);
+
+//? Every - same as some but it returns true if all the elements satisfies the condition
+
+console.log(movements.every((mov) => mov > 0));
+console.log(account4.movements.every((mov) => mov > 0));
+
+//? Separate CB
+let deposit = (mov) => mov > 0;
+console.log(account4.movements.every(deposit));
+
+//? Sorting - it mutates the original array (it sorts elements based on the strings)
+
+const owners = ["Samsul", "Adam", "Malina"];
+console.log(owners.sort());
+
+// console.log(movements.sort());
+
+movements.sort((a, b) => b - a);
+console.log(movements);

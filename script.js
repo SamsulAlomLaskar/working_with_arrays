@@ -61,9 +61,11 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
+  const sortMov = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
   containerMovements.innerHTML = "";
-  movements.forEach((move, ind) => {
+  sortMov.forEach((move, ind) => {
     const type = move > 0 ? "deposit" : "withdrawal";
     const html = `<div class="movements__row">
     <div class="movements__type movements__type--${type}">${
@@ -92,9 +94,10 @@ const createUsername = function (accounts) {
 console.log(accounts);
 createUsername(accounts);
 
-const calculateBalance = function (movements) {
-  const balance = movements.reduce((acc, curr) => acc + curr, 0);
-  labelBalance.textContent = `${balance}₹`;
+const calculateBalance = function (accs) {
+  accs.balance = accs.movements.reduce((acc, curr) => acc + curr, 0);
+
+  labelBalance.textContent = `${accs.balance}₹`;
 };
 
 // calculateBalance(account1.movements);
@@ -126,6 +129,12 @@ const calculateSummary = function (accs) {
 // Event Listener
 let currentAccount;
 
+const updateUI = function (acc) {
+  displayMovements(acc.movements);
+  calculateBalance(currentAccount);
+  calculateSummary(currentAccount);
+};
+
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
   currentAccount = accounts.find(
@@ -145,13 +154,86 @@ btnLogin.addEventListener("click", function (e) {
       currentAccount.owner.split(" ")[0]
     }`;
     containerApp.style.opacity = 100;
-    displayMovements(currentAccount.movements);
-    calculateBalance(currentAccount.movements);
-    calculateSummary(currentAccount);
+
+    updateUI(currentAccount);
   }
 });
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
+
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const recieverAcc = accounts.find(
+    (acc) => acc.userName === inputTransferTo.value
+  );
+  if (
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    recieverAcc?.userName !== currentAccount.userName &&
+    recieverAcc
+  ) {
+    //? Doing the transfer
+    currentAccount.movements.push(-amount);
+    recieverAcc.movements.push(amount);
+
+    // Updating the ui
+
+    updateUI(currentAccount);
+  }
+  inputTransferAmount.value = inputTransferTo.value = "";
+});
+
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (
+    currentAccount.userName === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      (acc) => acc.userName === currentAccount.userName
+    );
+
+    // clear the input
+
+    inputCloseUsername.value = inputClosePin.value = "";
+    // Delete Account
+
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+});
+
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const loanAmount = Number(inputLoanAmount.value);
+  if (
+    loanAmount > 0 &&
+    currentAccount.movements.some((mov) => mov >= loanAmount * 0.1)
+  ) {
+    //Add movement
+    currentAccount.movements.push(loanAmount);
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = "";
+});
+
+let sorted = false;
+
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+  /* 
+    if (sorted) {
+    btnSort.textContent = "&#8593";
+  } else {
+    btnSort.textContent = `&downarrow; SORT`;
+  } 
+  */
+});
+
+//
 // LECTURES
 
 /////////////////////////////////////////////////
